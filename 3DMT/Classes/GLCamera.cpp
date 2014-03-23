@@ -8,12 +8,12 @@
 
 #include "GLCamera.h"
 
-GLCamera::GLCamera(): _eye(GLPOINT_ZERO), _target(GLCAMERA_POINTZERO), _up(GLCAMERA_POINTUP)
+GLCamera::GLCamera(): _eye(GLVEC3_ZERO), _target(GLCAMERA_VEC3ZERO), _up(GLCAMERA_VEC3UP)
 {
     
 }
 
-GLCamera::GLCamera(GLPoint eye, GLPoint target, GLPoint up)
+GLCamera::GLCamera(GLVec3 eye, GLVec3 target, GLVec3 up)
 {
     _eye = eye;
     _target = target;
@@ -25,17 +25,17 @@ GLCamera::~GLCamera()
     
 }
 
-void GLCamera::changePosition(GLPoint &newEye)
+void GLCamera::changePosition(GLVec3 &newEye)
 {
     _eye = newEye;
 }
 
-void GLCamera::changeTarget(GLPoint &newTarget)
+void GLCamera::changeTarget(GLVec3 &newTarget)
 {
     _target = newTarget;
 }
 
-void GLCamera::changeUpDirection(GLPoint &newUp)
+void GLCamera::changeUpDirection(GLVec3 &newUp)
 {
     _up = newUp;
 }

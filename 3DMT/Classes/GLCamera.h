@@ -28,8 +28,8 @@ public:
     void view();
     void changePosition(GLVec3 &newEye);
     void changeTarget(GLVec3 &newTarget);
-    void changeUpDirection(GLVec3 &newUp);
     
+    void changeUpDirection(GLVec3 &newUp);
 };
 
 #endif /* defined(__OpenGL__GLCamera__) */

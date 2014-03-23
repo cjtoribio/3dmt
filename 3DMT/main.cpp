@@ -7,9 +7,16 @@
 //
 
 #include "Classes/GLFramework.h"
+#include "Classes/v2/Constants.cpp"
+#include "Classes/v2/Timer.cpp"
+#include "Classes/v2/Mouse.cpp"
+#include "Classes/v2/Keyboard.cpp"
+#include "Classes/v2/Camera.cpp"
 #include <vector>
 
 bool KEYS[256];
+
+Camera camera;
 
 GLVec3 CAMERA_POSITION;
 GLVec3 CAMERA_ROTATION;
@@ -17,12 +24,6 @@ GLVec3 CAMERA_ROTATION;
 int MOUSE_POSITION[2];
 int MOUSE_DELTA_POSITION[2];
 int MOUSE_LAST_POSITION[2];
-
-float WALKING_SPEED = 0.01;
-float LAST_TIME;
-float CURRENT_TIME;
-float DELTA_TIME;
-float MOUSE_SENSITIVITY = 1.0;
 
 vector<GLVec3> points;
 vector<GLColor> colors;
@@ -37,57 +38,57 @@ void keyBoardUp(unsigned char key, int x, int y)
     KEYS[key] = false;
 }
 
-void mouseMove(int x, int y)
-{
-    MOUSE_POSITION[0] = x;
-    MOUSE_POSITION[1] = y;
-}
 
 void preRenderEvents()
 {
     // Update globals
-    CURRENT_TIME = glutGet((float)GLUT_ELAPSED_TIME);
-    DELTA_TIME = CURRENT_TIME - LAST_TIME;
-    LAST_TIME = CURRENT_TIME;
-    
-    MOUSE_DELTA_POSITION[0] = MOUSE_POSITION[0] - MOUSE_LAST_POSITION[0];
-    MOUSE_DELTA_POSITION[1] = MOUSE_POSITION[1] - MOUSE_LAST_POSITION[1];
-    
-    MOUSE_LAST_POSITION[0] = MOUSE_POSITION[0];
-    MOUSE_LAST_POSITION[1] = MOUSE_POSITION[1];
-    
+	Timer::update();
+	
     // Process mouse
-    CAMERA_ROTATION.setY(CAMERA_ROTATION.getY() - MOUSE_DELTA_POSITION[0] * MOUSE_SENSITIVITY);
-    CAMERA_ROTATION.setZ(CAMERA_ROTATION.getZ() - MOUSE_DELTA_POSITION[1] * MOUSE_SENSITIVITY);
+	if(Mouse::isPressed(0))
+	{
+		camera.panLeft(-Mouse::getDX(), Constants::getMouseSense());
+		camera.panUp(-Mouse::getDY(), Constants::getMouseSense());
+	}
+	if(Mouse::isPressed(1))
+	{
+		camera.panOut(-Mouse::getDY(), Constants::getMouseSense());
+	}
     
     // Process keys
-    if(KEYS['w'])
+    if(Keyboard::isPressed('w'))
     {
         // Move foward
-        CAMERA_POSITION.setZ(CAMERA_POSITION.getZ() - (WALKING_SPEED * DELTA_TIME) * dcos(CAMERA_ROTATION.getY()));
-        CAMERA_POSITION.setX(CAMERA_POSITION.getX() - (WALKING_SPEED * DELTA_TIME) * dsin(CAMERA_ROTATION.getY()));
+        CAMERA_POSITION.setZ(CAMERA_POSITION.getZ() - (Constants::getWalkingSpeed() * Timer::getDelta()) * dcos(CAMERA_ROTATION.getY()));
+        CAMERA_POSITION.setX(CAMERA_POSITION.getX() - (Constants::getWalkingSpeed() * Timer::getDelta()) * dsin(CAMERA_ROTATION.getY()));
         
-    } if (KEYS['s'])
+    } 
+    if(Keyboard::isPressed('s'))
     {
         // Move backward
-        CAMERA_POSITION.setZ(CAMERA_POSITION.getZ() + (WALKING_SPEED * DELTA_TIME) * dcos(CAMERA_ROTATION.getY()));
-        CAMERA_POSITION.setX(CAMERA_POSITION.getX() + (WALKING_SPEED * DELTA_TIME) * dsin(CAMERA_ROTATION.getY()));
+        CAMERA_POSITION.setZ(CAMERA_POSITION.getZ() + (Constants::getWalkingSpeed() * Timer::getDelta()) * dcos(CAMERA_ROTATION.getY()));
+        CAMERA_POSITION.setX(CAMERA_POSITION.getX() + (Constants::getWalkingSpeed() * Timer::getDelta()) * dsin(CAMERA_ROTATION.getY()));
         
-    } if (KEYS['a'])
+    } 
+    if(Keyboard::isPressed('a'))
     {
         // Move left
-        CAMERA_POSITION.setX(CAMERA_POSITION.getX() - WALKING_SPEED * DELTA_TIME);
+        CAMERA_POSITION.setX(CAMERA_POSITION.getX() - Constants::getWalkingSpeed() * Timer::getDelta());
         
-    } if (KEYS['d'])
+    } 
+    if(Keyboard::isPressed('d'))
     {
         // Move right
-        CAMERA_POSITION.setX(CAMERA_POSITION.getX() + WALKING_SPEED * DELTA_TIME);
-    } if (KEYS[' '])
+        CAMERA_POSITION.setX(CAMERA_POSITION.getX() + Constants::getWalkingSpeed() * Timer::getDelta());
+    } 
+    if(Keyboard::isPressed(' '))
     {
         // Jump
         CAMERA_POSITION = GLCAMERA_VEC3ZERO;
         CAMERA_ROTATION = GLCAMERA_VEC3ZERO;
     }
+
+	Mouse::snapshot();
 }
 
 void display()
@@ -97,22 +98,36 @@ void display()
     glLoadIdentity();
     
     // Camera transformations
-    glTranslatef(-CAMERA_POSITION.getX(), -CAMERA_POSITION.getY(), -CAMERA_POSITION.getZ());
-    glRotatef(CAMERA_ROTATION.getX(), 1, 0, 0);
-    glRotatef(CAMERA_ROTATION.getY(), 0, 1, 0);
-    glRotatef(CAMERA_ROTATION.getZ(), 0, 0, 1);
+    glTranslatef(-camera.X , -camera.Y , -camera.Z);
+
+//    glRotatef(45, 0, 0, 1);
+//    glRotatef(45.0, 1.0, 0.0, 0.0);
+//    glRotatef(45, 0, 1, 0);
     
-    glBegin( GL_TRIANGLES );
+    glBegin( GL_POLYGON );
+    	glColor3f(0.0,0.0,1.0);
+    	glVertex3f(-10 , -10, 0);
+    	glVertex3f(-10 , 10, 0);
+    	glVertex3f(10 , 10, 0);
+    	glVertex3f(10 , -10, 0);
+	glEnd();
     
-    for (int i=0; i<points.size(); i++)
-    {
-        GLVec3 point = points[i];
-        GLColor color = colors[i];
-        cout << point.getX() << " " << point.getY() << " " << point.getZ() << endl;
-        glColor3f(color.getR(), color.getG(), color.getB());
-        glVertex3f(point.getX(), point.getY(), point.getZ());
-    }
-    glEnd();
+//    for (int i=0; i<points.size(); i++)
+//    {
+//        GLVec3 point = points[i];
+//        GLColor color = colors[i];
+////        cout << point.getX() << " " << point.getY() << " " << point.getZ() << endl;
+//        glColor3f(color.getR(), color.getG(), color.getB());
+//        glVertex3f(point.getX(), point.getY(), point.getZ());
+//    }
+
+	glColor3f(0.0,1.0,0.0);
+    glutSolidSphere(0.3,20,20);
+
+    glTranslatef(0.0,10.0,0.0);
+    
+	glColor3f(0.0,1.0,0.0);
+    glutSolidSphere(0.3,20,20);
     
     glutSwapBuffers();
 }
@@ -137,6 +152,7 @@ void reshape(int width, int height)
 
 void init(int argc, char **argv)
 {
+	
     // Initializing opengl with system parameters
     glutInit(&argc, argv);
 
@@ -153,10 +169,11 @@ void init(int argc, char **argv)
     glutReshapeFunc(reshape);
     
     // Setup GLUT input callback function
-    glutKeyboardFunc(keyBoardDown);
-    glutKeyboardUpFunc(keyBoardUp);
-    glutMotionFunc(mouseMove);
-    glutPassiveMotionFunc(mouseMove);
+    glutKeyboardFunc(Keyboard::setKeyDown);
+    glutKeyboardUpFunc(Keyboard::setKeyUp);
+    glutMouseFunc(Mouse::updateMouse);
+    glutMotionFunc(Mouse::updateMousePos);
+    glutPassiveMotionFunc(Mouse::updateMousePos);
     
     // Enter main loop
     glutMainLoop();
