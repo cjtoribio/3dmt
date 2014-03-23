@@ -4,7 +4,7 @@
  *  Created on: Mar 22, 2014
  *      Author: CarlosJose
  */
-
+#include <GL/glut.h>
 struct Keyboard
 {
 	bool KEY_STATE[256];
@@ -13,6 +13,9 @@ struct Keyboard
 			KEY_STATE[i] = false;
 	}
 public: 
+	const static int SHIFT = 1;
+	const static int CTRL = 2;
+	const static int ALT = 4;
 	static Keyboard& getKeyboard(){
         static Keyboard instance;
         return instance;

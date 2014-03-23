@@ -55,7 +55,7 @@ struct Camera
 		Y += result2.y;
 		Z += result2.z;
 	}
-	void panOut(float dx, float speed)
+	void zoomIn(float dx, float speed)
 	{
 		vec3 tV; 
 		tV.x = cos(PHI) * sin(THETA);
@@ -65,5 +65,13 @@ struct Camera
 		X -= tV.x;
 		Y -= tV.y;
 		Z -= tV.z;
+	}
+	void rotateLeft(float dx, float speed)
+	{
+		PHI += dx * speed;
+	}
+	void rotateUp(float dx, float speed)
+	{
+		THETA += dx * speed;
 	}
 };

@@ -24,7 +24,7 @@ public:
 	static void updateMouse(int button,int state,int x, int y){
 		getMouse().buttons[button] = state;
 		getMouse().mouseX = x;
-		getMouse().mouseY = y;			
+		getMouse().mouseY = y;
 	}
 	static void updateMousePos(int x, int y){
 		getMouse().mouseX = x;

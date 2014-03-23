@@ -44,49 +44,22 @@ void preRenderEvents()
     // Update globals
 	Timer::update();
 	
+	
     // Process mouse
-	if(Mouse::isPressed(0))
+	if(Mouse::isPressed(0) && Keyboard::isPressed(' '))
 	{
 		camera.panLeft(-Mouse::getDX(), Constants::getMouseSense());
 		camera.panUp(-Mouse::getDY(), Constants::getMouseSense());
 	}
-	if(Mouse::isPressed(1))
+	if(Mouse::isPressed(0) && Keyboard::isPressed('r'))
 	{
-		camera.panOut(-Mouse::getDY(), Constants::getMouseSense());
+		camera.rotateLeft(-Mouse::getDX(), Constants::getMouseSense());
+		camera.rotateUp(-Mouse::getDY(), Constants::getMouseSense());
 	}
-    
-    // Process keys
-    if(Keyboard::isPressed('w'))
-    {
-        // Move foward
-        CAMERA_POSITION.setZ(CAMERA_POSITION.getZ() - (Constants::getWalkingSpeed() * Timer::getDelta()) * dcos(CAMERA_ROTATION.getY()));
-        CAMERA_POSITION.setX(CAMERA_POSITION.getX() - (Constants::getWalkingSpeed() * Timer::getDelta()) * dsin(CAMERA_ROTATION.getY()));
-        
-    } 
-    if(Keyboard::isPressed('s'))
-    {
-        // Move backward
-        CAMERA_POSITION.setZ(CAMERA_POSITION.getZ() + (Constants::getWalkingSpeed() * Timer::getDelta()) * dcos(CAMERA_ROTATION.getY()));
-        CAMERA_POSITION.setX(CAMERA_POSITION.getX() + (Constants::getWalkingSpeed() * Timer::getDelta()) * dsin(CAMERA_ROTATION.getY()));
-        
-    } 
-    if(Keyboard::isPressed('a'))
-    {
-        // Move left
-        CAMERA_POSITION.setX(CAMERA_POSITION.getX() - Constants::getWalkingSpeed() * Timer::getDelta());
-        
-    } 
-    if(Keyboard::isPressed('d'))
-    {
-        // Move right
-        CAMERA_POSITION.setX(CAMERA_POSITION.getX() + Constants::getWalkingSpeed() * Timer::getDelta());
-    } 
-    if(Keyboard::isPressed(' '))
-    {
-        // Jump
-        CAMERA_POSITION = GLCAMERA_VEC3ZERO;
-        CAMERA_ROTATION = GLCAMERA_VEC3ZERO;
-    }
+	if(Mouse::isPressed(0) && Keyboard::isPressed('z'))
+	{
+		camera.zoomIn(-Mouse::getDY(), Constants::getMouseSense());
+	}
 
 	Mouse::snapshot();
 }
@@ -100,8 +73,8 @@ void display()
     // Camera transformations
     glTranslatef(-camera.X , -camera.Y , -camera.Z);
 
-//    glRotatef(45, 0, 0, 1);
-//    glRotatef(45.0, 1.0, 0.0, 0.0);
+    glRotatef(camera.THETA, 1.0, 0.0, 0.0);
+    glRotatef(camera.PHI, 0, 0, 1);
 //    glRotatef(45, 0, 1, 0);
     
     glBegin( GL_POLYGON );
