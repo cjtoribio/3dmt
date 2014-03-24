@@ -11,7 +11,7 @@
 GLLightSource::GLLightSource()
 {
     setShown(false);
-    setPosition4(GLPOINT4_ZERO);
+    setPosition4(GLVEC4_ZERO);
 }
 
 GLLightSource::~GLLightSource()
@@ -26,7 +26,7 @@ void GLLightSource::draw()
 
 void GLLightSource::indicate()
 {
-    GLPoint4 lightPos(getPosition4());
+    GLVec4 lightPos(getPosition4());
     
     if(isShown())
     {
@@ -34,14 +34,14 @@ void GLLightSource::indicate()
         glEnable(GL_LIGHTING);
         glEnable(GL_LIGHT0);
         
-        glMaterialfv(GL_FRONT, GL_AMBIENT, getAmbient().getPosPoint());
-        glMaterialfv(GL_FRONT, GL_DIFFUSE, getDifuse().getPosPoint());
+        glMaterialfv(GL_FRONT, GL_AMBIENT, getAmbient().getPosVec());
+        glMaterialfv(GL_FRONT, GL_DIFFUSE, getDifuse().getPosVec());
         
-        glMaterialfv(GL_FRONT, GL_SPECULAR, getSpecular().getPosPoint());
+        glMaterialfv(GL_FRONT, GL_SPECULAR, getSpecular().getPosVec());
         glMaterialfv(GL_FRONT, GL_AMBIENT, getDull());
         
         glPushMatrix();
-            glLightfv(GL_LIGHT0, GL_POSITION, lightPos.getPosPoint());
+            glLightfv(GL_LIGHT0, GL_POSITION, lightPos.getPosVec());
         glPopMatrix();
     }
     else
