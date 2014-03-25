@@ -24,6 +24,9 @@ struct vec3
 	vec3 operator*(const float num){
 		return vec3(x*num , y*num , z*num);
 	}
+	vec3 operator+(const vec3 &V){
+		return vec3(x+V.x , y+V.y , z+V.z);
+	}
 	float mag(){
 		return sqrt(x*x + y*y + z*z);
 	}
