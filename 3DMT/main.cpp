@@ -161,6 +161,28 @@ void display()
 	glPopMatrix();
 	
 
+//    glRotatef(45, 0, 0, 1);
+//    glRotatef(45.0, 1.0, 0.0, 0.0);
+//    glRotatef(45, 0, 1, 0);
+    
+    int N = 10;
+    
+    for(int x=0;x<N;x++)
+    {
+        for(int y=0;y<N;y++)
+        {
+            for(int z=0;z<N;z++)
+            {
+                if(x == 0 && y == 0)
+                    glColor3f(1, 0, 0);
+                if(x == 0)
+                    glColor3f(0, 1, 0);
+                glPushMatrix();
+                glutSolidSphere(0.4 * x, 1, 1);
+                glPopMatrix();
+            }
+        }
+    }
     pencil.draw();
     glutSwapBuffers();
 }
@@ -216,7 +238,7 @@ int main(int argc, char** argv)
 {
     rapidjson::Document doc;
     
-    GLFileReader::getDocumentFromFile(&doc, PYRAMID_FILE);
+    GLFileReader::getDocumentFromFile(&doc, PYRAMID_FILE_TORIBIO);
     
     for (Value::ConstMemberIterator it=doc.MemberBegin(); it != doc.MemberEnd(); it++)
     {

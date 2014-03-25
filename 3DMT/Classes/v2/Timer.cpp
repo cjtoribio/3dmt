@@ -5,7 +5,8 @@
  *      Author: CarlosJose
  */
 
-#include <GL/glut.h>
+#include "../SpecialKeys.h"
+
 class Timer
 {
 	float currentTime, lastTime;

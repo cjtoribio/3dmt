@@ -60,7 +60,9 @@ static className* create methodArgs \
 #define dsin(deg) sin(DEGREES_TO_RAD(deg))
 #define dcos(deg) cos(DEGREES_TO_RAD(deg))
 
-#define PYRAMID_FILE "C:\\Users\\CarlosJose\\Documents\\EclipseWorkspaces\\Kepler\\Alpha\\GLUT\\src\\Resources\\pyramid.points"
+#define PYRAMID_FILE_VIC "/Users/vmp2408/Workspace/Development/C++/3dmt/3DMT/Resources/pyramid.points"
+
+#define PYRAMID_FILE_TORIBIO "C:\\Users\\CarlosJose\\Documents\\EclipseWorkspaces\\Kepler\\Alpha\\GLUT\\src\\Resources\\pyramid.points"
 
 #define LEFTARROWKEY GLUT_KEY_LEFT
 #define RIHGTARROWKEY GLUT_KEY_RIHGT
