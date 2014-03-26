@@ -6,25 +6,39 @@
 //  Copyright (c) 2014 Victor Manuel Polanco. All rights reserved.
 //
 
-#include "Classes/GLFramework.h"
-#include "Classes/v2/Constants.cpp"
-#include "Classes/v2/Timer.cpp"
-#include "Classes/v2/Mouse.cpp"
-#include "Classes/v2/Keyboard.cpp"
-#include "Classes/v2/Point.cpp"
-#include "Classes/v2/SignalFilter.cpp"
-//#include "Classes/v2/Camera.cpp"
-#include "Classes/v2/CameraPencil.cpp"
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glut.h>
+
+#include <cmath>
+#include <algorithm>
+#include <cstdlib>
+#include <string>
 #include <vector>
 
+#include "Classes/SpecialKeys.h"
+#include "Classes/utils/GLFileReader.h"
+#include "Classes/utils/rapidjson/document.h"
+
+#include "./Classes/v2/Controls/Timer.cpp"
+#include "./Classes/v2/Controls/Constants.cpp"
+#include "./Classes/v2/Controls/Mouse.cpp"
+#include "./Classes/v2/Controls/Keyboard.cpp"
+#include "./Classes/v2/Controls/Camera.cpp"
+#include "./Classes/v2/Controls/CameraPencil.cpp"
+#include "./Classes/v2/Controls/SignalFilter.cpp"
+
+#include "./Classes/v2/Geometry/Line.cpp"
+
+#include <iostream>
+using namespace std;
 
 bool KEYS[256];
 
+int width , height;
 Camera camera;
 CameraPencil pencil;
-
-vector<GLVec3> points;
-vector<GLColor> colors;
+vector<double> XX, YY, ZZ;
 
 void keyBoardDown(unsigned char key, int x, int y)
 {
@@ -44,16 +58,13 @@ void preRenderEvents()
 	
 	
     // Process mouse
-	if(Mouse::isPressed(0) && !Keyboard::isPressed('p'))
-	{
-		camera.rotateLeft(Mouse::getDX(), Constants::getMouseSense());
-		camera.rotateUp(-Mouse::getDY(), Constants::getMouseSense());
-	}
-	else if(Mouse::isPressed(0))
-	{
-		pencil.moveLeft(camera , -Mouse::getDX() * Constants::getMouseSense());
-		pencil.moveUp(camera , Mouse::getDY() * Constants::getMouseSense());
-	}
+	/*
+	if( abs(width/2 - Mouse::getX()) > 10)
+		camera.rotateLeft((width/2 - Mouse::getX()) , Constants::getMouseSense());
+	if( abs(height/2 - Mouse::getY()) > 10)
+		camera.rotateUp(-(height/2 - Mouse::getY()) , Constants::getMouseSense());
+//	*/
+	
 	if(Keyboard::isPressed('a') || Keyboard::isPressed('d'))
 	{
 		camera.walkLeft(Keyboard::isPressed('a') ? 1 : -1, Constants::getWalkingSpeed());
@@ -61,6 +72,10 @@ void preRenderEvents()
 	if(Keyboard::isPressed('w') || Keyboard::isPressed('s'))
 	{
 		camera.walkFront(Keyboard::isPressed('w') ? 1 : -1, Constants::getWalkingSpeed());
+	}
+	if(Mouse::isPressed(0) || Mouse::isPressed(2))
+	{
+		camera.fly( (Mouse::isPressed(0) ? 1 : -1) * Constants::getWalkingSpeed());
 	}
 
 	Mouse::snapshot();
@@ -73,9 +88,9 @@ void process1(SignalFilter::CD *VEC, int SZ)
 }
 void process2(SignalFilter::CD *VEC, int SZ)
 {
-	for(int i = SZ/10; i < SZ; ++i)
+	for(int i = 18; i < SZ; ++i)
 		VEC[i] = 0;
-//	VEC[0] = 0;
+	VEC[0] = 0;
 }
 void display()
 {
@@ -94,44 +109,44 @@ void display()
 //    	glVertex3f(10 , -10, 0);
 //	glEnd();
     
-//    vector<double> VEC;
-//    srand(3958769);
-//    VEC.push_back(60);
-//    for(int i = 1; i < 128; ++i)
-//    {
-//    	VEC.push_back( max(min(VEC.back() + rand() % 20 - 10 , 120.0),0.0) );
-//    	Point(0,i,VEC.back()).draw();
-//    }
-//    SignalFilter SF;
-////    for(int i = 0; i < 64; ++i)
-////    	SF.push(50);
-//    for(int i = 0; i < 128; ++i)
-//    	SF.push(VEC[i]);
-////    for(int i = 0; i < 64; ++i)
-////    	SF.push(VEC.back() );
-//    VEC = SF.getProcessedSignal(process1);
-//    for(int i = 0; i < 128; ++i)
-//    {
-//    	Point p(0,i,VEC[i]);
-//    	p.setColor(1,1,0);
-////    	p.draw();
-//    }
-//    VEC = SF.getProcessedSignal(process2);
-//    vector<double> INT(VEC.size());
-//    for(int i = 0; i < 128; ++i)
-//    {
-//    	Point p(0,i,VEC[i]);
-//    	p.setColor(1,0,1);
-//    	p.draw();
-//    	INT[i] = (VEC[i] + ((i == 0) ? 0 : INT[i-1]));
-//    }
-//    for(int i = 0; i < 128; ++i)
-//    {
-//    	Point p(0,i,INT[i] * 0.1);
-//    	p.setColor(0,0,1);
-//    	p.draw();
-//    }
+    // 160
+    vector< vector<double> > VVV;
+    VVV.push_back(XX);
+    VVV.push_back(YY);
+    VVV.push_back(ZZ);
+    float sum = 0;
+    for(int K = 0; K < 3; ++K)
+	{
+        SignalFilter SF(process2);
+        SignalFilter SF2(process2);
+		vector<float> XXX(VVV[K].begin() + 0 , VVV[K].end());
+		for(int i = 0; i < XXX.size(); i += 1)
+		{
+			
+			float x = XXX[i];
+			x *= 10;
+			float t = 1.0 * i / XXX.size() * 160;
+//			Point  P(0,t,x + 80 - 50 *K);
+//			P.radius = 0.05;
+//			P.setColor(1,0,0);
+//			P.draw();
+			SF.push(x);
+			
+			float tt = SF.pop();
+//			if(tt > 0)tt = max(0.0f , tt-2);
+//			if(tt < 0)tt = min(0.0f , tt+2);
+			sum += tt;
+			SF2.push(sum);
+			Point P2(0,t,SF2.pop()/20 + 80 - 50*K); ;
+			P2.radius = 0.1;
+			P2.setColor(1,0,0);
+			P2.draw();
+		}
+	}
+    
 	
+    
+    
 	glColor3f(1.0,1.0,1.0);
 	glutSolidSphere(1,10,10);
 	for(float x = 0; x <= 40; x += 1)
@@ -146,6 +161,8 @@ void display()
 					if(z == 0)glColor3f(1.0,0.0,0.0); // RED
 					if(y == 0)glColor3f(0.0,0.0,1.0); // BLUE
 					if(x == 0)glColor3f(0.0,1.0,0.0); // GREEN
+					if(x==0)continue;
+					if(z==0)continue;
 					glPushMatrix();
 					glTranslated(4*x,4*y,4*z);
 					glutSolidSphere(0.4,4,4);
@@ -187,8 +204,10 @@ void display()
     glutSwapBuffers();
 }
 
-void reshape(int width, int height)
+void reshape(int p_width, int p_height)
 {
+	width = p_width;
+	height = p_height;
     if(height == 0)
         height = 1;
     
@@ -226,6 +245,7 @@ void init(int argc, char **argv)
     // Setup GLUT input callback function
     glutKeyboardFunc(Keyboard::setKeyDown);
     glutKeyboardUpFunc(Keyboard::setKeyUp);
+    glutSpecialFunc(Keyboard::setSpecialKey);
     glutMouseFunc(Mouse::updateMouse);
     glutMotionFunc(Mouse::updateMousePos);
     glutPassiveMotionFunc(Mouse::updateMousePos);
@@ -238,26 +258,25 @@ int main(int argc, char** argv)
 {
     rapidjson::Document doc;
     
-    GLFileReader::getDocumentFromFile(&doc, PYRAMID_FILE_TORIBIO);
-    
-    for (Value::ConstMemberIterator it=doc.MemberBegin(); it != doc.MemberEnd(); it++)
+    freopen("Gs.txt","r",stdin);
+    string line;
+    for(int i = 0; i < 9; ++i)
+    	getline(cin , line);
+    for(int i = 0;  ; ++i)
     {
-        string s = it->name.GetString();
-        rapidjson::Value &val = doc[s.c_str()];
-        
-        float x = val["x"].GetDouble();
-        float y = val["y"].GetDouble();
-        float z = val["z"].GetDouble();
-        
-        points.push_back(glv3(x, y, z));
+    	string d;
+    	double xx, yy,zz;
+    	if(cin >> d >> zz >> d >> xx >> d >> yy)
+    	{
+    		XX.push_back(xx);
+    		YY.push_back(yy);
+    		ZZ.push_back(zz);
+    	}
+    	else
+    		break;
     }
     
-    for (int i=0; i<4; i++)
-    {
-        colors.push_back(RED);
-        colors.push_back(GREEN);
-        colors.push_back(BLUE);
-    }
+    
     
     init(argc, argv);
     
