@@ -11,19 +11,17 @@
 #include "Classes/v2/Timer.cpp"
 #include "Classes/v2/Mouse.cpp"
 #include "Classes/v2/Keyboard.cpp"
-#include "Classes/v2/Camera.cpp"
+#include "Classes/v2/Point.cpp"
+#include "Classes/v2/SignalFilter.cpp"
+//#include "Classes/v2/Camera.cpp"
+#include "Classes/v2/CameraPencil.cpp"
 #include <vector>
+
 
 bool KEYS[256];
 
 Camera camera;
-
-GLVec3 CAMERA_POSITION;
-GLVec3 CAMERA_ROTATION;
-
-int MOUSE_POSITION[2];
-int MOUSE_DELTA_POSITION[2];
-int MOUSE_LAST_POSITION[2];
+CameraPencil pencil;
 
 vector<GLVec3> points;
 vector<GLColor> colors;
@@ -44,51 +42,99 @@ void preRenderEvents()
     // Update globals
 	Timer::update();
 	
+	
     // Process mouse
-	if(Mouse::isPressed(0))
+	if(Mouse::isPressed(0) && !Keyboard::isPressed('p'))
 	{
-		camera.panLeft(-Mouse::getDX(), Constants::getMouseSense());
-		camera.panUp(-Mouse::getDY(), Constants::getMouseSense());
+		camera.rotateLeft(Mouse::getDX(), Constants::getMouseSense());
+		camera.rotateUp(-Mouse::getDY(), Constants::getMouseSense());
 	}
-	if(Mouse::isPressed(1))
+	else if(Mouse::isPressed(0))
 	{
-		camera.panOut(-Mouse::getDY(), Constants::getMouseSense());
+		pencil.moveLeft(camera , -Mouse::getDX() * Constants::getMouseSense());
+		pencil.moveUp(camera , Mouse::getDY() * Constants::getMouseSense());
 	}
-    
-    // Process keys
-    if(Keyboard::isPressed('w'))
-    {
-        // Move foward
-        CAMERA_POSITION.setZ(CAMERA_POSITION.getZ() - (Constants::getWalkingSpeed() * Timer::getDelta()) * dcos(CAMERA_ROTATION.getY()));
-        CAMERA_POSITION.setX(CAMERA_POSITION.getX() - (Constants::getWalkingSpeed() * Timer::getDelta()) * dsin(CAMERA_ROTATION.getY()));
-        
-    } 
-    if(Keyboard::isPressed('s'))
-    {
-        // Move backward
-        CAMERA_POSITION.setZ(CAMERA_POSITION.getZ() + (Constants::getWalkingSpeed() * Timer::getDelta()) * dcos(CAMERA_ROTATION.getY()));
-        CAMERA_POSITION.setX(CAMERA_POSITION.getX() + (Constants::getWalkingSpeed() * Timer::getDelta()) * dsin(CAMERA_ROTATION.getY()));
-        
-    } 
-    if(Keyboard::isPressed('a'))
-    {
-        // Move left
-        CAMERA_POSITION.setX(CAMERA_POSITION.getX() - Constants::getWalkingSpeed() * Timer::getDelta());
-        
-    } 
-    if(Keyboard::isPressed('d'))
-    {
-        // Move right
-        CAMERA_POSITION.setX(CAMERA_POSITION.getX() + Constants::getWalkingSpeed() * Timer::getDelta());
-    } 
-    if(Keyboard::isPressed(' '))
-    {
-        // Jump
-        CAMERA_POSITION = GLCAMERA_VEC3ZERO;
-        CAMERA_ROTATION = GLCAMERA_VEC3ZERO;
-    }
+	if(Keyboard::isPressed('a') || Keyboard::isPressed('d'))
+	{
+		camera.walkLeft(Keyboard::isPressed('a') ? 1 : -1, Constants::getWalkingSpeed());
+	}
+	if(Keyboard::isPressed('w') || Keyboard::isPressed('s'))
+	{
+		camera.walkFront(Keyboard::isPressed('w') ? 1 : -1, Constants::getWalkingSpeed());
+	}
 
 	Mouse::snapshot();
+}
+void process1(SignalFilter::CD *VEC, int SZ)
+{
+	for(int i = 0; i < SZ; ++i)
+		VEC[i].real(VEC[i].real() * (SZ - i) * (SZ - i) / (SZ*SZ)),
+		VEC[i].imag(VEC[i].imag() * (SZ - i) * (SZ - i) / (SZ*SZ));
+}
+void process2(SignalFilter::CD *VEC, int SZ)
+{
+	for(int i = SZ/10; i < SZ; ++i)
+		VEC[i] = 0;
+//	VEC[0] = 0;
+}
+
+void drawBackground()
+{
+    glMatrixMode (GL_MODELVIEW);
+	glPushMatrix ();
+    {
+        glLoadIdentity ();
+        glMatrixMode (GL_PROJECTION);
+        glPushMatrix ();
+        {
+            glLoadIdentity ();
+            
+            glEnable(GL_LIGHTING);
+            glEnable(GL_DEPTH_TEST);
+    
+            glBegin (GL_QUADS);
+                glColor3f(1.0,1.0,0.0);
+                glVertex3f(-100.0f,-100.0f, -100.0f);
+                glVertex3f( 100.0f,-100.0f, -100.0f);
+    
+                glColor3f(0.0,1.0,1.0);
+                glVertex3f( 100.0f, 100.0f, -100.0f);
+                glVertex3f(-100.0f, 100.0f, -100.0f);
+            glEnd ();
+            
+            glDisable(GL_LIGHTING);
+            glDisable(GL_DEPTH_TEST);
+        }
+        glPopMatrix ();
+        glMatrixMode (GL_MODELVIEW);
+    }
+	glPopMatrix ();
+}
+
+void drawPlanes()
+{
+    glColor3f(1.0,1.0,1.0);
+	glutSolidSphere(1,10,10);
+	for(float x = 0; x <= 40; x += 1)
+		for(float y=0; y <= 40; y += 1)
+		{
+			for(float z=0; z <= 40 ; z += 1)
+			{
+                //				if(x==0)continue;
+				if(abs(x) == 0 || abs(y) == 0 || abs(z) == 0)
+				{
+					if(x == 0 && y==0 && z == 0)continue;
+					if(x == 0)glColor3f(0.0, 0.0, 0.0); // RED
+					if(y == 0)glColor3f(0.0, 1.0, 0.0); // GREEN
+                    if(z == 0)glColor3f(0.0, 0.0, 1.0); // BLUE
+					
+					glPushMatrix();
+					glTranslated(4*x,4*y,4*z);
+					glutSolidSphere(0.4,4,4);
+					glPopMatrix();
+				}
+			}
+		}
 }
 
 void display()
@@ -98,39 +144,57 @@ void display()
     glLoadIdentity();
     
     // Camera transformations
-    glTranslatef(-camera.X , -camera.Y , -camera.Z);
+    camera.position();
+    
+    drawBackground();
+    
+    vector<double> VEC;
+	srand(3958769);
+	VEC.push_back(60);
+	for(int i = 1; i < 128; ++i)
+	{
+		VEC.push_back( max(min(VEC.back() + rand() % 20 - 10 , 120.0),0.0) );
+		Point(0,i,VEC.back()).draw();
+	}
+	SignalFilter SF;
+	//    for(int i = 0; i < 64; ++i)
+	//    	SF.push(50);
+	for(int i = 0; i < 128; ++i)
+		SF.push(VEC[i]);
+	//    for(int i = 0; i < 64; ++i)
+	//    	SF.push(VEC.back() );
+	VEC = SF.getProcessedSignal(process1);
+	for(int i = 0; i < 128; ++i)
+	{
+		Point p(0,i,VEC[i]);
+		p.setColor(1,1,0);
+        //    	p.draw();
+	}
+	VEC = SF.getProcessedSignal(process2);
+	vector<double> INT(VEC.size());
+	for(int i = 0; i < 128; ++i)
+	{
+		Point p(0,i,VEC[i]);
+		p.setColor(1,0,1);
+		p.draw();
+		INT[i] = (VEC[i] + ((i == 0) ? 0 : INT[i-1]));
+	}
+	for(int i = 0; i < 128; ++i)
+	{
+		Point p(0,i,INT[i] * 0.1);
+		p.setColor(0,0,1);
+		p.draw();
+	}
+	
+	drawPlanes();
+	
+    
 
 //    glRotatef(45, 0, 0, 1);
 //    glRotatef(45.0, 1.0, 0.0, 0.0);
 //    glRotatef(45, 0, 1, 0);
     
-    int N = 10;
-    
-    for(int x=0;x<N;x++)
-    {
-        for(int y=0;y<N;y++)
-        {
-            for(int z=0;z<N;z++)
-            {
-                if(x == 0 && y == 0)
-                    glColor3f(1, 0, 0);
-                if(x == 0)
-                    glColor3f(0, 1, 0);
-                glPushMatrix();
-                glutSolidSphere(0.4 * x, 1, 1);
-                glPopMatrix();
-            }
-        }
-    }
-
-	glColor3f(0.0,1.0,0.0);
-    glutSolidSphere(0.3,20,20);
-
-    glTranslatef(0.0,10.0,0.0);
-    
-	glColor3f(0.0,1.0,0.0);
-    glutSolidSphere(0.3,20,20);
-    
+    pencil.draw();
     glutSwapBuffers();
 }
 
@@ -176,11 +240,11 @@ void init(int argc, char **argv)
     glutMouseFunc(Mouse::updateMouse);
     glutMotionFunc(Mouse::updateMousePos);
     glutPassiveMotionFunc(Mouse::updateMousePos);
-    
+//    glClearColor(0.51, 0.49, 0.49, 1.0f);
     // Enter main loop
     glutMainLoop();
 }
-
+// 108.59.85.251
 int main(int argc, char** argv)
 {
     rapidjson::Document doc;
