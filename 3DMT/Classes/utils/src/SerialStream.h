@@ -11,7 +11,7 @@
 #include <string>
 #include <fstream>
 #include <cassert>
-#include <SerialStreamBuf.h>
+#include "SerialStreamBuf.h"
 
 extern "C++" {
     namespace LibSerial {
@@ -348,4 +348,9 @@ extern "C++" {
 
     } ; // namespace LibSerial
 } // extern "C++"
+
+#if defined(__APPLE__) && defined(__MACH__)
+#   include "SerialStream.cc"
+#endif
+
 #endif // #ifndef _SerialStream_h_

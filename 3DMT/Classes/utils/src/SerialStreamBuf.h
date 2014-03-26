@@ -570,4 +570,9 @@ extern "C++" {
 
     } ; // namespace LibSerial
 } // extern "C++"
+
+#if defined(__APPLE__) && defined(__MACH__)
+#   include "SerialStreamBuf.cc"
+#endif
+
 #endif // #ifndef _SerialStreamBuf_h_
