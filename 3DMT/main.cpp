@@ -168,7 +168,7 @@ void drawPoints()
     VVV.push_back(ZZ);
     
     float sum = 0;
-    bool filtered = false;
+    bool filtered = true;
     
     for(int K = 0; K < 3; ++K)
 	{
@@ -178,19 +178,18 @@ void drawPoints()
 		vector<float> XXX(VVV[K].begin() + 0 , VVV[K].end());
 		for(int i = 0; i < XXX.size(); i += 1)
 		{
-			
-			float x = XXX[i];
+            float x = i < XXX.size() ? XXX[i] : 0;
 			x *= 10;
-			float t = 1.0 * i / XXX.size() * 160;
+			float t = 1.0 * i / (XXX.size()) * 160;
             
             if(!filtered)
             {
                 Point  P(0,t,x + 80 - 50 *K);
-                P.radius = 0.05;
-                P.setColor(1,0,0);
-                P.draw();
-                SF.push(x);
+//                P.radius = 0.05;
+//                P.setColor(1,0,0);
+//                P.draw();
             }
+            SF.push(x);
 			
 			float tt = SF.pop();
 //			if(tt > 0)tt = max(0.0f , tt-2);
@@ -200,7 +199,7 @@ void drawPoints()
             if(filtered)
             {
                 SF2.push(sum);
-                Point P2(0,t,SF2.pop()/20 + 80 - 50*K); ;
+                Point P2(0,t,SF2.pop() + 80 - 50*K); ;
                 P2.radius = 0.1;
                 P2.setColor(1,0,0);
                 P2.draw();
@@ -223,7 +222,8 @@ void display()
     drawPoints();
     
 	drawPlanes();
-
+    
+    
 
 //    glRotatef(45, 0, 0, 1);
 //    glRotatef(45.0, 1.0, 0.0, 0.0);
@@ -237,6 +237,7 @@ void reshape(int p_width, int p_height)
 {
 	width = p_width;
 	height = p_height;
+    
     if(height == 0)
         height = 1;
     
@@ -296,22 +297,23 @@ int main(int argc, char** argv)
     
     string line;
     
-    for(int i = 0; i < 9; ++i)
-    	getline(cin , line);
+//    for(int i = 0; i < 9; ++i)
+//    	getline(cin , line);
     
     for(int i = 0;  ; ++i)
     {
     	string d;
     	double xx, yy,zz;
-    	if(cin >> d >> zz >> d >> xx >> d >> yy)
+    	if(cin >> d >> xx >> d >> yy >> d >> zz)
     	{
     		XX.push_back(xx);
-    		YY.push_back(yy);
-    		ZZ.push_back(zz);
+    		YY.push_back(zz);
+    		ZZ.push_back(yy);
     	}
     	else
     		break;
     }
+    cout << XX.size() << endl;
     
     init(argc, argv);
 

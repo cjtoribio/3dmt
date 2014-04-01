@@ -28,8 +28,9 @@ struct Line
 		glPushMatrix();
 		glLineWidth(width);
 		glBegin(GL_LINES);
-		glVertex3f(A.x , A.y , A.z);
-		glVertex3f(B.x , B.y , B.z);
+        
+            glVertex3f(A.x , A.y , A.z);
+            glVertex3f(B.x , B.y , B.z);
 		glPopMatrix();
 	}
 };
