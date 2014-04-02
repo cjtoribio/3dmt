@@ -9,17 +9,17 @@
 #ifndef File_Camera
 #define File_Camera
 
-#include "../../SpecialKeys.h"
+#include "../../utils/SpecialKeys.h"
 #include <math.h>
 #include "vec3.cpp"
 
 
-class Camera
+class Camera2
 {
 	float X , Y , Z;
 	float PHI , THETA;
 public: 
-	Camera(){
+	Camera2(){
 		PHI = 180;
 		THETA = 85;
 		X = 200;

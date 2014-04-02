@@ -5,16 +5,16 @@
  *      Author: CarlosJose
  */
 
-#ifndef File_Keyboard
-#define File_Keyboard
+#ifndef File_Keyboard2
+#define File_Keyboard2
 
 
-struct Keyboard
+struct Keyboard2
 {
 	bool KEY_STATE[256];
 	bool SPECIAL_KEYS[110];
 	int count;
-	Keyboard(){
+	Keyboard2(){
 		for(int i = 0; i < 256; ++i)
 			KEY_STATE[i] = false;
 		for(int i = 0; i < 110; ++i)
@@ -25,29 +25,29 @@ public:
 	const static int SHIFT = 1;
 	const static int CTRL = 2;
 	const static int ALT = 4;
-	static Keyboard& getKeyboard(){
-        static Keyboard instance;
+	static Keyboard2& getKeyboard2(){
+        static Keyboard2 instance;
         return instance;
 	}
 	static void setKeyDown(unsigned char key, int x, int y){
-		getKeyboard().KEY_STATE[key] = true;
+		getKeyboard2().KEY_STATE[key] = true;
 	}
 	static void setKeyUp(unsigned char key, int x, int y){
-		getKeyboard().KEY_STATE[key] = false;
+		getKeyboard2().KEY_STATE[key] = false;
 	}
 	static void setSpecialKey(int key, int x, int y){
-		getKeyboard().SPECIAL_KEYS[key] ^= 1;
+		getKeyboard2().SPECIAL_KEYS[key] ^= 1;
 	}
 	static bool isPressed(unsigned char key){
-		return getKeyboard().KEY_STATE[key];
+		return getKeyboard2().KEY_STATE[key];
 	}
 	static bool isSpecialPressed(int key){
-		return getKeyboard().SPECIAL_KEYS[key];
+		return getKeyboard2().SPECIAL_KEYS[key];
 	}
 	
 	
-	Keyboard(Keyboard const&);
-    void operator=(Keyboard const&);
+	Keyboard2(Keyboard2 const&);
+    void operator=(Keyboard2 const&);
 };
 
 #endif

@@ -11,10 +11,10 @@
 
 #include <math.h>
 
-struct vec3
+struct vec32
 {
 	double x,y,z;
-	vec3(double x = 0,double y = 0,double z = 0){
+	vec32(double x = 0,double y = 0,double z = 0){
 		this->x = x;
 		this->y = y;
 		this->z = z;

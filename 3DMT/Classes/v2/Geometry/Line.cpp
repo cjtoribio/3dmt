@@ -8,7 +8,7 @@
 #ifndef File_Line
 #define File_Line
 
-#include "../../SpecialKeys.h"
+#include "../../utils/SpecialKeys.h"
 
 #include "./Color.cpp"
 #include "./Point.cpp"

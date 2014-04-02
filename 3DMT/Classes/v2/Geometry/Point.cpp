@@ -8,7 +8,7 @@
 #ifndef File_Point
 #define File_Point
 
-#include "../../SpecialKeys.h"
+#include "../../utils/SpecialKeys.h"
 
 struct Point
 {

@@ -1,61 +1,61 @@
 /*
- * Mouse.cpp
+ * Mouse2.cpp
  *
  *  Created on: Mar 22, 2014
  *      Author: CarlosJose
  */
 
-#ifndef File_Mouse
-#define File_Mouse
+#ifndef File_Mouse2
+#define File_Mouse2
 
 
-struct Mouse
+struct Mouse2
 {
-	float mouseX , mouseY;
+	float Mouse2X , Mouse2Y;
 	float prevX , prevY;
 	bool buttons[5];
-	Mouse(){
-		prevX = mouseX = 0;
-		prevY = mouseY = 0;
+	Mouse2(){
+		prevX = Mouse2X = 0;
+		prevY = Mouse2Y = 0;
 		for(int i = 0; i < 5; ++i)
 			buttons[i] = true;
 	}
 public: 
-	static Mouse& getMouse(){
-        static Mouse instance;
+	static Mouse2& getMouse2(){
+        static Mouse2 instance;
         return instance;
 	}
-	static void updateMouse(int button,int state,int x, int y){
-		getMouse().buttons[button] = state;
-		getMouse().mouseX = x;
-		getMouse().mouseY = y;
+	static void updateMouse2(int button,int state,int x, int y){
+		getMouse2().buttons[button] = state;
+		getMouse2().Mouse2X = x;
+		getMouse2().Mouse2Y = y;
 	}
-	static void updateMousePos(int x, int y){
-		getMouse().mouseX = x;
-		getMouse().mouseY = y;
+	static void updateMouse2Pos(int x, int y){
+		getMouse2().Mouse2X = x;
+		getMouse2().Mouse2Y = y;
 	}
 	static void snapshot(){
-		getMouse().prevX = getMouse().mouseX;
-		getMouse().prevY = getMouse().mouseY;
+		getMouse2().prevX = getMouse2().Mouse2X;
+		getMouse2().prevY = getMouse2().Mouse2Y;
 	}
 	static float getX(){
-		return getMouse().mouseX;
+		return getMouse2().Mouse2X;
 	}
 	static float getDX(){
-		return getMouse().mouseX - getMouse().prevX;
+		return getMouse2().Mouse2X - getMouse2().prevX;
 	}
 	static float getY(){
-		return getMouse().mouseY;
+		return getMouse2().Mouse2Y;
 	}
 	static float getDY(){
-		return getMouse().mouseY - getMouse().prevY;
+		return getMouse2().Mouse2Y - getMouse2().prevY;
 	}
 	static bool isPressed(int id){
-		return !getMouse().buttons[id];
+		return !getMouse2().buttons[id];
 	}
 	
-	Mouse(Mouse const&);
-    void operator=(Mouse const&);
+	Mouse2(Mouse2 const&);
+    void operator=(Mouse2 const&);
 };
 
 
