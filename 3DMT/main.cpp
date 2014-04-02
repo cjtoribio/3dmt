@@ -33,6 +33,8 @@
 #include "./Classes/v2/Geometry/Line.cpp"
 
 #include "Classes/utils/src/SerialStream.h"
+#include "Classes/utils/libusb/libusb.h"
+#include "Classes/utils/arduino-serial/arduino-serial-lib.h"
 
 #include <iostream>
 using namespace std;
@@ -285,6 +287,65 @@ void init(int argc, char **argv)
 }
 // 108.59.85.25
 
+vector<string> print_devs()
+{
+    vector<string> devices;
+    
+	libusb_device *dev;
+    
+    libusb_device **devs;
+	int r;
+	ssize_t cnt;
+    
+	r = libusb_init(NULL);
+    
+	cnt = libusb_get_device_list(NULL, &devs);
+    
+	int i = 0;
+    
+	while ((dev = devs[i++]) != NULL) {
+		struct libusb_device_descriptor desc;
+		int r = libusb_get_device_descriptor(dev, &desc);
+		if (r < 0) {
+			fprintf(stderr, "failed to get device descriptor");
+		}
+        char *s;
+        
+        sscanf(s,"%d/%d", libusb_get_bus_number(dev), libusb_get_device_address(dev));
+        
+        string device = s;
+        
+        cout << device << endl;
+        devices.push_back(device);
+	}
+    return devices;
+}
+
+void init_port()
+{
+    char serialBuffer[BUFFMAX];
+    
+    int portConf = -1;
+    
+    vector<string> devs = print_devs();
+    
+    for (int i=0; i<devs.size(); i++)
+    {
+        if(portConf != -1)
+            break;
+        portConf = serialport_init(devs[i].c_str(), B57600);
+        cout << "Connecting to arduino" << endl;
+    }
+    
+    memset(serialBuffer, 0, BUFFMAX);
+    
+    while (true)
+    {
+        serialport_read_until(portConf, serialBuffer, ENDOFLN, BUFFMAX, TIMEOUT);
+        printf("%s\n", serialBuffer);
+    }
+}
+
 int main(int argc, char** argv)
 {
     rapidjson::Document doc;
@@ -315,7 +376,9 @@ int main(int argc, char** argv)
     }
     cout << XX.size() << endl;
     
-    init(argc, argv);
+    init_port();
+    
+    //init(argc, argv);
 
     return 0;
 }
@@ -359,5 +422,9 @@ int main(int argc, char** argv)
  p.setColor(0,0,1);
  //p.draw();
  }
+ 
+ ----------
+ 
+ 
  
  */

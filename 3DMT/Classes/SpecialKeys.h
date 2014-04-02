@@ -22,6 +22,9 @@
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 980
 #define WINDOW_TITLE "3D Modeling Tool"
+#define BUFFMAX 256
+#define ENDOFLN '\n'
+#define TIMEOUT 5000
 
 #define glv3(x, y, z) GLVec3(x, y, z)
 #define glv4(x, y, z, w) GLVec4(x, y, z, w)
@@ -61,7 +64,7 @@ static className* create methodArgs \
 #define dsin(deg) sin(DEGREES_TO_RAD(deg))
 #define dcos(deg) cos(DEGREES_TO_RAD(deg))
 
-#define PORT "/dev/tty.usbmodem1d1321"
+#define PORT "/dev/cu.usbmodem1421"
 
 #define PYRAMID_FILE_VIC "/Users/vmp2408/Workspace/Development/C++/OpenGL/3dmt/3DMT/Resources/pyramid.points"
 #define G_FILE_VIC "/Users/vmp2408/Workspace/Development/C++/OpenGL/3dmt/3DMT/Resources/Gs.txt"
