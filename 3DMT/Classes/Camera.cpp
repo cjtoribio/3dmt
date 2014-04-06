@@ -55,7 +55,7 @@ void Camera::rotateUp(float dx, float speed)
     _THETA += dx * speed;
 }
 
-vec3 Camera::getPosition()
+vec3 Camera::getPointingVector()
 {
     _position.x = cos(M_PI / 180 * _PHI) * sin(M_PI / 180 * _THETA);
     _position.y = sin(M_PI / 180 * _PHI) * sin(M_PI / 180 * _THETA);
@@ -64,7 +64,7 @@ vec3 Camera::getPosition()
     return _position;
 }
 
-vec3 Camera::getPositionXY()
+vec3 Camera::getPointingVectorXY()
 {
     double x = cos(M_PI / 180 * _PHI);
     double y = sin(M_PI / 180 * _PHI);

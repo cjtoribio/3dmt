@@ -24,7 +24,7 @@ GLSphere::~GLSphere()
 void GLSphere::draw()
 {
     glPushMatrix();
-    glColor3f(getColor().getR(), getColor().getG(), getColor().getB());
+    glColor3f(getColor().r, getColor().g, getColor().b);
     
     glutSolidSphere(getRadius(), getSlices(), getStacks());
     glPopMatrix();

@@ -13,6 +13,8 @@
 #include <cmath>
 #include <cstdlib>
 #include <vector>
+#include <fstream>
+#include <cstdio>
 
 using namespace std;
 
@@ -42,8 +44,8 @@ using namespace std;
 #define PLANEXZ "XZ"
 #define PLANEYZ "YZ"
 
-#define glv3(x, y, z) GLVec3(x, y, z)
-#define glv4(x, y, z, w) GLVec4(x, y, z, w)
+#define glv3(x, y, z) vec3(x, y, z)
+#define glv4(x, y, z, w) vec4(x, y, z, w)
 
 #define GLVEC3_ZERO glv3(0.0, 0.0, 0.0)
 #define GLVEC4_ZERO glv4(0.0, 0.0, 0.0, 0.0)

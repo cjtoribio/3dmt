@@ -15,6 +15,7 @@
 #include "utils/hardware/Arduino.h"
 #include "utils/math/SignalFilter.cpp"
 #include "utils/primitives/GLObject.h"
+#include "utils/SpecialKeys.h"
 
 class Drawer: public GLObject
 {

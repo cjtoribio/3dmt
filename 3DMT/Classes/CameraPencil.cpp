@@ -8,8 +8,8 @@
 #ifndef File_CameraPencil
 #define File_CameraPencil
 
-#include "Camera.cpp"
-#include "vec3.cpp"
+#include "Camera.h"
+#include "utils/primitives/vec3.cpp"
 
 struct CameraPencil
 {
@@ -29,28 +29,28 @@ struct CameraPencil
 		this->G = G;
 		this->B = B;
 	}
-	void moveLeft(const Camera2 &camera, double dx)
+	void moveLeft(const Camera &camera, double dx)
 	{
-		vec3 direction = camera.getPointingVector();
-		vec3 forward = camera.getPointingVectorXY();
-		forward.z = 1;
-		forward = forward * (1/forward.mag());
-		vec3 left = forward ^ direction;
-		x += left.x * dx;
-		y += left.y * dx;
-		z += left.z * dx;
+//		vec3 direction = camera.getPointingVector();
+//		vec3 forward = camera.getPointingVectorXY();
+//		forward.z = 1;
+//		forward = forward * (1/forward.mag());
+//		vec3 left = forward ^ direction;
+//		x += left.x * dx;
+//		y += left.y * dx;
+//		z += left.z * dx;
 	}
-	void moveUp(const Camera2 &camera, double dx)
+	void moveUp(const Camera &camera, double dx)
 	{
-		vec3 direction = camera.getPointingVector();
-		vec3 forward = camera.getPointingVectorXY();
-		forward.z = 1;
-		forward = forward * (1/forward.mag());
-		vec3 left = forward ^ direction;
-		vec3 up = left ^ forward;
-		x += up.x * dx;
-		y += up.y * dx;
-		z += up.z * dx;
+//		vec3 direction = camera.getPointingVector();
+//		vec3 forward = camera.getPointingVectorXY();
+//		forward.z = 1;
+//		forward = forward * (1/forward.mag());
+//		vec3 left = forward ^ direction;
+//		vec3 up = left ^ forward;
+//		x += up.x * dx;
+//		y += up.y * dx;
+//		z += up.z * dx;
 	}
 	void draw()
 	{

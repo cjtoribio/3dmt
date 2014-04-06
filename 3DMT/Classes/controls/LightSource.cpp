@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Victor Manuel Polanco. All rights reserved.
 //
 
-#include "GLLightSource.h"
+#include "LightSource.h"
 
 GLLightSource::GLLightSource()
 {
@@ -26,7 +26,7 @@ void GLLightSource::draw()
 
 void GLLightSource::indicate()
 {
-    GLVec4 lightPos(getPosition4());
+    vec4 lightPos(getPosition4());
     
     if(isShown())
     {

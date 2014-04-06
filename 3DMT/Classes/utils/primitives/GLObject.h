@@ -1,5 +1,5 @@
-//  GLObject.h
 //  OpenGL
+//  GLObject.h
 //
 //
 //  Created by Victor Manuel Polanco on 3/10/14.

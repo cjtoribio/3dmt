@@ -9,7 +9,8 @@
 #ifndef __OpenGL__GLSphere__
 #define __OpenGL__GLSphere__
 
-#include "GLObject.h"
+#include "../primitives/GLObject.h"
+#include "../SpecialKeys.h"
 
 class GLSphere: public GLObject
 {
@@ -18,9 +19,9 @@ public:
     GLSphere();
     ~GLSphere();
     
-    SYNTHESIZE(double, _radius, Radius);
-    SYNTHESIZE(int, _slices, Slices);
-    SYNTHESIZE(int, _stacks, Stacks);
+    PROPERTY(double, _radius, Radius);
+    PROPERTY(int, _slices, Slices);
+    PROPERTY(int, _stacks, Stacks);
     
     virtual void draw();
 };

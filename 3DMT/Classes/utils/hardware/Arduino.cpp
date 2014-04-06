@@ -35,5 +35,5 @@ void Arduino::fillDataBuffer()
     
     tempbuff = buffer;
     
-    printf("%s", tempbuff.c_str());
+    //printf("%s", tempbuff.c_str());
 }

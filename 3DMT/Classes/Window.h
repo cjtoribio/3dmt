@@ -11,13 +11,14 @@
 
 #include "utils/primitives/GLObject.h"
 #include "Drawer.h"
+#include "Camera.h"
 
-class Camera;
+
 
 class Window : public GLObject
 {
     PROPERTY_PRIVATE(Camera, camera, Camera);
-    
+   
 public:
     
     Window();

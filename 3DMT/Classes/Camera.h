@@ -32,8 +32,8 @@ public:
     void rotateLeft(float dx, float speed);
     void rotateUp(float dx, float speed);
     
-    vec3 getPosition();
-    vec3 getPositionXY();
+    vec3 getPointingVector();
+    vec3 getPointingVectorXY();
     
 };
 

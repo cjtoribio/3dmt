@@ -9,17 +9,17 @@
 #ifndef __OpenGL__GLLightSource__
 #define __OpenGL__GLLightSource__
 
-#include "GLObject.h"
+#include "../utils/primitives/GLObject.h"
 
 class GLLightSource: public GLObject
 {
 public:
     
-    SYNTHESIZE(GLVec4, _ambient, Ambient);
-    SYNTHESIZE(GLVec4, _difuse, Difuse);
-    SYNTHESIZE(GLVec4, _specular, Specular);
-    SYNTHESIZE(GLVec4, _position4, Position4);
-    SYNTHESIZE(GLfloat*, _dull, Dull);
+    PROPERTY(vec4, _ambient, Ambient);
+    PROPERTY(vec4, _difuse, Difuse);
+    PROPERTY(vec4, _specular, Specular);
+    PROPERTY(vec4, _position4, Position4);
+    PROPERTY(GLfloat*, _dull, Dull);
     SYNTHESIZE_BOOLEAN(bool, _show, Shown);
     
     GLLightSource();
