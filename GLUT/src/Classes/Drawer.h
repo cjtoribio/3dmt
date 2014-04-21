@@ -58,7 +58,7 @@ public:
     void drawPoints();
     void drawDrawings();
 
-    void pressKey(int key);
+    void pressKey(int,int,int);
     
     static void process1(SignalFilter::CD *VEC, int SZ);
     static void process2(SignalFilter::CD *VEC, int SZ);

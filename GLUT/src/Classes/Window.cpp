@@ -98,14 +98,11 @@ void Window::handleEvents()
 		camera.fly((Mouse::isPressed(0) ? 2 : -2) * WALKING_SPEED);
 	}
 	
-	char regKeys[] = {'x','z'};
-	for(int i = 0; i < 2; ++i)
+	char regKeys[] = {'z','x','c'};
+	for(int i = 0; i < 3; ++i)
 	{
 		char c = regKeys[i];
-		if(Keyboard::isPressed(c) && Keyboard::changedState(c))
-		{
-			drawer.pressKey(c);
-		}
+		drawer.pressKey(c , Keyboard::isPressed(c) , Keyboard::changedState(c) );
 	}
     
 	Keyboard::snapshot();

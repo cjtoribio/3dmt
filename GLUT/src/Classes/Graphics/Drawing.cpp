@@ -35,4 +35,6 @@ void Drawing::undo()
 {
 	if(referencePoints.size())referencePoints.pop_back();
 	lastPoint = referencePoints.size() ? referencePoints.back() : mousePosition;
+	mousePosition = lastPoint;
+	referencePosition = lastPoint;
 }

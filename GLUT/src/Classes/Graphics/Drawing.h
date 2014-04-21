@@ -18,7 +18,8 @@ class Drawing {
 	 vector<vec3> referencePoints;
 
 
-	PROPERTY(vec3 , mousePosition , MousePosition);
+	 PROPERTY(vec3 , referencePosition , ReferencePosition);
+	 PROPERTY(vec3 , mousePosition , MousePosition);
 		
 //	 IDrawingConcept concept = PolyLine(); --> Todos polytine
 	

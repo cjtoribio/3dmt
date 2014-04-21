@@ -31,26 +31,17 @@ void Drawer::init()
     activePoints=vector<vec3>(2048);
     processors = map<char,vector<IProcessor*> >();
 
+	processors['X'].push_back(new SignalFilter(process4));
 	processors['X'].push_back(new WindowAverager());
-    processors['X'].push_back(new BiasDiscriminator());
-    processors['X'].push_back(new PittySignalCanceller(0.05));
-    processors['X'].push_back(new Integrator(10));
-	processors['X'].push_back(new WindowAverager());
-    processors['X'].push_back(new BiasDiscriminator());
-	processors['X'].push_back(new Amplifier(30));
-    processors['X'].push_back(new Integrator(10));
+	processors['X'].push_back(new Amplifier(-100));
 //	processors['X'].push_back(new WindowAverager());
+//    processors['X'].push_back(new Integrator(5));
 
 
 
+	processors['Y'].push_back(new SignalFilter(process4));
 	processors['Y'].push_back(new WindowAverager());
-    processors['Y'].push_back(new BiasDiscriminator());
-    processors['Y'].push_back(new PittySignalCanceller(0.05));
-    processors['Y'].push_back(new Integrator(10));
-	processors['Y'].push_back(new WindowAverager());
-    processors['Y'].push_back(new BiasDiscriminator());
-	processors['Y'].push_back(new Amplifier(30));
-    processors['Y'].push_back(new Integrator(10));
+	processors['Y'].push_back(new Amplifier(-100));
 //	processors['Y'].push_back(new WindowAverager());
 //    processors['Y'].push_back(new Integrator(5));
 
@@ -170,22 +161,36 @@ void Drawer::drawPlanes()
 void Drawer::drawCursor()
 {
     vec3 p = activePoints[(cursor+activePoints.size() -1)%activePoints.size()];
-	Point P(drawing.getMousePosition() + p);
+	Point P(drawing.getReferencePosition() + p);
 	P.setColor(WHITE);
 	P.radius = 1;
 	P.draw();
 }
 
-void Drawer::pressKey(int key)
+void Drawer::pressKey(int key , int pressed, int changed)
 {
 	if(key == 'z')
 	{
-		vec3 p = activePoints[(cursor+activePoints.size() -1)%activePoints.size()];
-		drawing.setMousePosition(drawing.getMousePosition() + p);
+		if(pressed)
+		{
+			vec3 p = activePoints[(cursor+activePoints.size() -1)%activePoints.size()];
+			drawing.setMousePosition(drawing.getReferencePosition() + p);
+		}
+		else if(changed)
+		{
+			vec3 p = activePoints[(cursor+activePoints.size() -1)%activePoints.size()];
+			drawing.setReferencePosition(drawing.getReferencePosition() + p);
+		}
 	}
-	if(key == 'x')
+	else if(key == 'x' && pressed && changed)
 	{
 		drawing.savePoint();
+		vec3 p = activePoints[(cursor+activePoints.size() -1)%activePoints.size()];
+		drawing.setReferencePosition(drawing.getReferencePosition() + p);
+	}
+	else if(key == 'c' && pressed && changed)
+	{
+		drawing.undo();
 	}
 }
 
