@@ -38,7 +38,7 @@ double BiasDiscriminator::pop()
 	buffer.pop();
 	sqAvg = (sqAvg * sqBuffer.size() - sqBuffer.front()) / (sqBuffer.size() - 1);
 	sqBuffer.pop();
-	if(dev <= 1e-5)
+	if(dev <= 0.5e-5)
 		mode = avg;
     return avg - mode;
 }

@@ -33,21 +33,24 @@ void Drawer::init()
 
 	processors['X'].push_back(new WindowAverager());
     processors['X'].push_back(new BiasDiscriminator());
+    processors['X'].push_back(new PittySignalCanceller(0.05));
     processors['X'].push_back(new Integrator(10));
-    processors['X'].push_back(new BiasDiscriminator());
 	processors['X'].push_back(new WindowAverager());
-	processors['X'].push_back(new Amplifier(300));
-//    processors['X'].push_back(new Integrator(5));
+    processors['X'].push_back(new BiasDiscriminator());
+	processors['X'].push_back(new Amplifier(30));
+    processors['X'].push_back(new Integrator(10));
 //	processors['X'].push_back(new WindowAverager());
 
 
+
 	processors['Y'].push_back(new WindowAverager());
     processors['Y'].push_back(new BiasDiscriminator());
+    processors['Y'].push_back(new PittySignalCanceller(0.05));
     processors['Y'].push_back(new Integrator(10));
-    processors['Y'].push_back(new BiasDiscriminator());
 	processors['Y'].push_back(new WindowAverager());
-	processors['Y'].push_back(new Amplifier(300));
-//    processors['Y'].push_back(new Integrator(5));
+    processors['Y'].push_back(new BiasDiscriminator());
+	processors['Y'].push_back(new Amplifier(30));
+    processors['Y'].push_back(new Integrator(10));
 //	processors['Y'].push_back(new WindowAverager());
 //    processors['Y'].push_back(new Integrator(5));
 
@@ -139,7 +142,7 @@ void Drawer::draw()
     drawPlanes();
     drawCursor();
     drawDrawings();
-//    drawPoints();
+    drawPoints();
 }
 
 void Drawer::drawDrawings()
@@ -193,26 +196,18 @@ void Drawer::drawPoints()
 //    CL.setWidth(3);
     for(int i = cursor , j = (cursor + 1) % activePoints.size(); j != cursor; i = (i+1) % activePoints.size() , j = (j+1) % activePoints.size())
     {
-        vec3 point1 = activePoints[i] * 10;
-        vec3 point2 = activePoints[j] * 10;
+        vec3 point1 = activePoints[i];
+        vec3 point2 = activePoints[j];
         
 
         
         float t1 = 1.0 * i / activePoints.size() * 200;
         float t2 = 1.0 * j / activePoints.size() * 200;
 
-
-        point1.z = point1.y;
-        point1.y = point1.x;
-        point1.x = 0;
-
-        point2.z = point2.y;
-        point2.y = point2.x;
-        point2.x = 0;
-        
+       
         
 //        Line(point1 + vec3(0,150,60), point2 + vec3(0,150,60),GREEN).draw();
-//        Line(vec3(0,t1,point1.x * 5 + 200) , vec3(0,t2,point2.x * 5 + 200), RED).draw();
+        Line(vec3(t1,point1.x + 60,0) , vec3(t2,point2.x + 60,0), RED).draw();
 //        Line(vec3(0,t1,0 + 200) , vec3(0,t2,0 + 200), WHITE).draw();
 //        Line(vec3(0,t1,point1.y * 5 + 120) , vec3(0,t2,point2.y * 5 + 120), RED).draw();
 //        Line(vec3(0,t1,0 + 120) , vec3(0,t2,0 + 120), WHITE).draw();

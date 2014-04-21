@@ -25,9 +25,9 @@ struct SignalFilter : IProcessor
 	void (*treatSignal)(CD *CV,const int SZ) ;
 	static void doNothing(CD *CV, const int SZ){}
 	SignalFilter(void (*process)(CD *CV,const int SZ) = doNothing){
-		FRONT_FRAMES = 64;
-		MIDDLE_FRAMES = 128;
-		BACK_FRAMES = 64;
+		FRONT_FRAMES = 16;
+		MIDDLE_FRAMES = 32;
+		BACK_FRAMES = 16;
 		unProcessedFrames = 0;
 		this->treatSignal = process;
 	}

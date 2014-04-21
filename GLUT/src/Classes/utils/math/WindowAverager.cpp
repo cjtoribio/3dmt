@@ -23,7 +23,7 @@ void WindowAverager::push(double num)
 
 double WindowAverager::pop()
 {
-	if(buffer.size() <= 40)return 0;
+	if(buffer.size() <= 60)return 0;
 	double ret = average;
 	average = (average * buffer.size() - buffer.front()) / (buffer.size() - 1);
 	buffer.pop();
