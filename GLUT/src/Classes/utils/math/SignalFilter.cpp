@@ -8,10 +8,13 @@
 #ifndef File_SignalFilter
 #define File_SignalFilter
 
-#include "../../utils/SpecialKeys.h"
+#include <deque>
+#include <complex>
+#include <vector>
+#include "./IProcessor.h"
 
 using namespace std;
-struct SignalFilter
+struct SignalFilter : IProcessor
 {
 	typedef complex<double> CD;
 	typedef long long Long;
@@ -22,9 +25,9 @@ struct SignalFilter
 	void (*treatSignal)(CD *CV,const int SZ) ;
 	static void doNothing(CD *CV, const int SZ){}
 	SignalFilter(void (*process)(CD *CV,const int SZ) = doNothing){
-		FRONT_FRAMES = 256;
-		MIDDLE_FRAMES = 512;
-		BACK_FRAMES = 256;
+		FRONT_FRAMES = 64;
+		MIDDLE_FRAMES = 128;
+		BACK_FRAMES = 64;
 		unProcessedFrames = 0;
 		this->treatSignal = process;
 	}
@@ -138,8 +141,8 @@ struct SignalFilter
 		if(toExit.size() == 0)return 0;
 		return toExit.front();
 	}
-	float pop(){
-		float ret = front();
+	double pop(){
+		double ret = front();
 		if(toExit.size() == 0)return ret;
 		toExit.pop_front();
 		return ret;

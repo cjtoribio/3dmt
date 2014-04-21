@@ -43,6 +43,11 @@ bool Keyboard::isPressed(unsigned char key)
     return getKeyboard().KEY_STATE[key];
 }
 
+bool Keyboard::changedState(unsigned char key)
+{
+    return getKeyboard().KEY_STATE[key] != getKeyboard().SS_KEY_STATE[key];
+}
+
 void Keyboard::setSpecialKey(int key, int x, int y)
 {
     getKeyboard().SPECIAL_KEYS[key] ^= 1;
@@ -51,4 +56,13 @@ void Keyboard::setSpecialKey(int key, int x, int y)
 bool Keyboard::isSpecialPressed(int key)
 {
     return getKeyboard().SPECIAL_KEYS[key];
+}
+
+void Keyboard::snapshot()
+{
+    for(int i = 0; i < KEYSCNT; ++i)
+    	getKeyboard().SS_KEY_STATE[i] = getKeyboard().KEY_STATE[i];
+    
+    for(int i = 0; i < SPECIALKEYSCNT; ++i)
+    	getKeyboard().SS_SPECIAL_KEYS[i] = getKeyboard().SPECIAL_KEYS[i];
 }

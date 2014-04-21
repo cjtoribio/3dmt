@@ -17,7 +17,7 @@ vec3::vec3(float _x, float _y, float _z)
 
 vec3::vec3()
 {
-    
+    x = 0 , y = 0 , z = 0;
 }
 
 vec3::~vec3()
@@ -58,6 +58,16 @@ vec3 vec3::operator*(const float num)
     return vec3(x*num , y*num , z*num);
 }
 
+vec3 vec3::operator+(const float num)
+{
+    return vec3(x+num , y+num , z+num);
+}
+
+vec3 vec3::operator-(const float num)
+{
+    return vec3(x-num , y-num , z-num);
+}
+
 vec3 vec3::operator+(const vec3 &V)
 {
     return vec3(x+V.x , y+V.y , z+V.z);
@@ -75,4 +85,12 @@ vec3 vec3::operator^(const vec3 &V)
 				-(x * V.z - z * V.x) ,
 				+(x * V.y - y * V.x)
                 );
+}
+
+string vec3::toString()
+{
+	char str[40];
+	sprintf(str,"vec3(%lf, %lf, %lf)",x,y,z);
+	string a = str;
+	return a;
 }

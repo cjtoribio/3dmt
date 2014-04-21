@@ -10,15 +10,13 @@
 #define OpenGL_Constants_h
 
 #include <iostream>
-#include <cstdio>
 #include <cmath>
+#include <cstdio>
 #include <cstdlib>
 #include <vector>
+#include <algorithm>
+#include <ctime>
 #include <queue>
-#include <string>
-#include <deque>
-#include <complex>
-#include <vector>
 
 using namespace std;
 
@@ -32,7 +30,6 @@ using namespace std;
 #   include <GL/gl.h>
 #endif
 
-#define M_PI 3.14159265358979323846
 #define WINDOW_WIDTH 1280
 #define WINDOW_HEIGHT 980
 #define WINDOW_TITLE "3D Modeling Tool"
@@ -40,9 +37,9 @@ using namespace std;
 #define KEYSCNT 256
 #define SPECIALKEYSCNT 110
 #define ENDOFLN '\n'
-#define TIMEOUT 200
-#define MOUSE_SENSITIVITY 0.0001
-#define WALKING_SPEED 0.05
+#define TIMEOUT 20
+#define MOUSE_SENSITIVITY 0.0005
+#define WALKING_SPEED 0.4
 #define FRAMES_PER_SEC 20
 #define PLANE_MAX 500
 #define PLANEXY "XY"
@@ -56,8 +53,8 @@ using namespace std;
 #define GLVEC4_ZERO glv4(0.0, 0.0, 0.0, 0.0)
 #define GLCAMERA_VEC3ZERO glv3(0.0, 0.0, -100.0)
 #define GLCAMERA_VEC3UP glv3(0.0, 1.0, 0.0)
-
-#define SYNTHESIZE_BOOLEAN(varType, varName, funName)\
+#define COMMA ,
+#define PROPERTY_BOOLEAN(varType, varName, funName)\
 protected: varType varName;\
 public: virtual varType is##funName(void) const { return varName; }\
 public: virtual void set##funName(varType var){ varName = var; }
@@ -104,7 +101,8 @@ static className* create methodArgs \
 #define dsin(deg) sin(DEGREES_TO_RAD(deg))
 #define dcos(deg) cos(DEGREES_TO_RAD(deg))
 
-#define PORT "/dev/cu.usbmodem1421"
+#define PORT1 "/dev/cu.usbmodem1421"
+#define PORT2 "/dev/cu.usbmodem1411"
 
 #define PYRAMID_FILE_VIC "/Users/vmp2408/Workspace/Development/C++/OpenGL/3dmt/3DMT/Resources/pyramid.points"
 #define G_FILE_VIC "/Users/vmp2408/Workspace/Development/C++/OpenGL/3dmt/3DMT/Resources/Gs.txt"

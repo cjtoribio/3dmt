@@ -14,7 +14,9 @@
 class Keyboard
 {
 public:
-    
+
+    PROPERTY_PUBLIC(bool, SS_KEY_STATE[KEYSCNT], SS_KEY_STATE);
+    PROPERTY_PUBLIC(bool, SS_SPECIAL_KEYS[SPECIALKEYSCNT], SS_SPECIAL_KEYS);
     PROPERTY_PUBLIC(bool, KEY_STATE[KEYSCNT], KEY_STATE);
     PROPERTY_PUBLIC(bool, SPECIAL_KEYS[SPECIALKEYSCNT], SPECIAL_KEYS);
     
@@ -23,12 +25,15 @@ public:
     
     static Keyboard& getKeyboard();
     
+    static void snapshot();
+    
     static void setSpecialKey(int key, int x, int y);
     static void setKeyUp(unsigned char key, int x, int y);
     static void setKeyDown(unsigned char key, int x, int y);
     
     static bool isSpecialPressed(int key);
     static bool isPressed(unsigned char key);
+    static bool changedState(unsigned char key);
     
     void operator=(Keyboard const&);
     

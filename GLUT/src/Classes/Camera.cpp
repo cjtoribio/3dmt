@@ -10,9 +10,9 @@
 
 Camera::Camera()
 {
-    _PHI = 180;
-    _THETA = 85;
-    _position = vec3(150, 60, 70);
+    _PHI = 90;
+    _THETA = 180;
+    _position = vec3(50, 50, 300);
 }
 
 Camera::~Camera()
@@ -47,11 +47,13 @@ void Camera::walkFront(float dx, float speed)
 
 void Camera::rotateLeft(float dx, float speed)
 {
+	return;
     _PHI += dx * speed;
 }
 
 void Camera::rotateUp(float dx, float speed)
 {
+	return;
     _THETA += dx * speed;
 }
 

@@ -10,6 +10,7 @@
 #define __OpenGL__Point__
 
 #include "../primitives/GLObject.h"
+#include "../primitives/vec3.h"
 
 class Point: public GLObject
 {
@@ -20,7 +21,8 @@ public:
     PROPERTY_PUBLIC(float, z, Z);
     PROPERTY_PUBLIC(float, radius, Radius);
     
-    Point();
+    Point();    
+    Point(vec3);
     Point(float x, float y, float z);
     ~Point();
     

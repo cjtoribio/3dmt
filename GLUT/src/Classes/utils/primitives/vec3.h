@@ -33,9 +33,14 @@ public:
     
     vec3 operator^(const vec3 &V);
     vec3 operator*(const float num);
+    vec3 operator+(const float num);
+    vec3 operator-(const float num);
     vec3 operator+(const vec3 &V);
     
     CREATE_METHOD(vec3, initialize, (float x, float y, float z), (), (x, y, z));
+    
+    string toString();
+    
 };
 
 #if defined(__APPLE__) && defined(__MACH__)

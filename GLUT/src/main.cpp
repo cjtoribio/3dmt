@@ -7,23 +7,15 @@
 //
 
 #include "Classes/3DMT.h"
-#include "Classes/hardware/arduino-serial/SerialPort.h"
 
+#include <ctime>
 using namespace std;
-
-
 
 int main(int argc, char** argv)
 {
-	SerialPort SP("\\\\.\\COM1" , 9600);
-	
-	SP.init();
-	  
-	string line = SP.readUntil('\n');
-	cout << line << endl;
-//    Window window;
+    Window window;
 
-//    window.init(argc, argv);
+    window.init(argc, argv);
     
     return 0;
 }
